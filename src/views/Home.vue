@@ -3,14 +3,21 @@
         <HomeHeader v-if="artworks" :artworks="shuffle(artworks.data.data)" />
         <HomeGrid v-if="artworks" :grid-array="shuffle(artworks.data.data)" />
         <HomeFooter />
+        <!-- <HomeArtWork :artwork="artwork?.data.data" /> -->
     </ui-level>
 </template>
 
 <script lang="ts" setup>
 import axios from "axios";
 import { shuffle } from "lodash";
+import { computed, ref, watch } from "vue";
 import { useQuery } from "vue-query";
+import { useRoute } from "vue-router";
 import { headerOptions } from "../composables/useHeadersToken";
+
+const route = useRoute();
+
+const selectedArtworkId = ref<number>();
 
 const { data: artworks } = useQuery(
     ["artworks"],
@@ -24,5 +31,23 @@ const { data: artworks } = useQuery(
     { refetchOnWindowFocus: false }
 );
 
-// const artworksData = computed(() => artworks.value?.data);
+const { data: artwork } = useQuery(
+    ["artworks", selectedArtworkId.value],
+    () =>
+        axios.get(
+            `${import.meta.env.VITE_STRAPI_URL}/api/artworks/${
+                selectedArtworkId.value
+            }?populate=*`,
+            headerOptions
+        ),
+    { enabled: computed(() => !!selectedArtworkId.value) }
+);
+
+watch(
+    () => route.query,
+    () => {
+        selectedArtworkId.value = route.query.artworkId;
+        console.log(route.query);
+    }
+);
 </script>

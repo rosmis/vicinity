@@ -14,7 +14,7 @@
                 universes and styles gathered by our team at Vicinity.
             </p>
             <template v-if="gridArray">
-                <HomeArtWork
+                <HomeArtWorkCard
                     v-for="(item, index) in gridArray"
                     :key="index"
                     :image-source="
@@ -30,6 +30,7 @@
                             .small.height
                     "
                     :column-width="200"
+                    :image-index="item.id"
                     :ratio="item.attributes.format"
                 />
             </template>
