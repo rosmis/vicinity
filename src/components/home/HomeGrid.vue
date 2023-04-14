@@ -5,7 +5,7 @@
                 class="font-semibold leading-relaxed text-4xl col-span-3"
                 ref="introText"
                 :style="{
-                    gridRowEnd: `span ${ratioGrid + 4}`,
+                    gridRowEnd: `span ${ratioGrid! + 4}`,
                 }"
             >
                 Dive into a unique digital experience, through the secret garden
