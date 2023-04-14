@@ -10,14 +10,12 @@
 <script lang="ts" setup>
 import axios from "axios";
 import { shuffle } from "lodash";
-import { computed, ref, watch } from "vue";
 import { useQuery } from "vue-query";
-import { useRoute } from "vue-router";
 import { headerOptions } from "../composables/useHeadersToken";
 
-const route = useRoute();
+// const route = useRoute();
 
-const selectedArtworkId = ref<number>();
+// const selectedArtworkId = ref<number>();
 
 const { data: artworks } = useQuery(
     ["artworks"],
@@ -31,23 +29,23 @@ const { data: artworks } = useQuery(
     { refetchOnWindowFocus: false }
 );
 
-const { data: artwork } = useQuery(
-    ["artworks", selectedArtworkId.value],
-    () =>
-        axios.get(
-            `${import.meta.env.VITE_STRAPI_URL}/api/artworks/${
-                selectedArtworkId.value
-            }?populate=*`,
-            headerOptions
-        ),
-    { enabled: computed(() => !!selectedArtworkId.value) }
-);
+// const { data: artwork } = useQuery(
+//     ["artworks", selectedArtworkId.value],
+//     () =>
+//         axios.get(
+//             `${import.meta.env.VITE_STRAPI_URL}/api/artworks/${
+//                 selectedArtworkId.value
+//             }?populate=*`,
+//             headerOptions
+//         ),
+//     { enabled: computed(() => !!selectedArtworkId.value) }
+// );
 
-watch(
-    () => route.query,
-    () => {
-        selectedArtworkId.value = route.query.artworkId;
-        console.log(route.query);
-    }
-);
+// watch(
+//     () => route.query,
+//     () => {
+//         selectedArtworkId.value = route.query.artworkId;
+//         console.log(route.query);
+//     }
+// );
 </script>

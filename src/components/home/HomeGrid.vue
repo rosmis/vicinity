@@ -51,7 +51,7 @@ const introText = ref<HTMLDivElement>();
 onMounted(() => {
     ratioGrid.value = Math.min(
         7,
-        Math.floor(introText.value?.offsetHeight / 40)
+        Math.floor(introText.value?.offsetHeight! / 40)
     );
 });
 </script>

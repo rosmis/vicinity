@@ -51,7 +51,7 @@ const props = defineProps<{
     imageHeight: number;
     imageIndex: number;
     imageWidth: number;
-    ratio: "square" | "portrait";
+    ratio: "square" | "portrait" | "blank";
     columnWidth: number;
 }>();
 
