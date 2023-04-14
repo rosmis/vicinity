@@ -23,24 +23,20 @@
                         :show-dots="false"
                         class="flex-1"
                     >
-                        <n-carousel-item :style="{ width: '60%' }">
+                        <n-carousel-item
+                            v-for="(item, index) in artworks"
+                            :style="{ width: '60%' }"
+                        >
                             <img
                                 class="carousel-img"
-                                src="../../assets/header/image 13.png"
+                                :src="
+                                    item.attributes?.mainImage.data.attributes
+                                        ?.formats.small.url
+                                "
+                                :key="`home${index}`"
                             />
                         </n-carousel-item>
-                        <n-carousel-item :style="{ width: '60%' }">
-                            <img
-                                class="carousel-img"
-                                src="../../assets/header/image 14.png"
-                            />
-                        </n-carousel-item>
-                        <n-carousel-item :style="{ width: '60%' }">
-                            <img
-                                class="carousel-img"
-                                src="../../assets/header/image 15.png"
-                            />
-                        </n-carousel-item>
+
                         <template #arrow="{ prev, next }">
                             <div class="custom-arrow">
                                 <button
@@ -78,6 +74,10 @@
 <script lang="ts" setup>
 import { ArrowBack, ArrowForward } from "@vicons/ionicons5";
 import { NCarousel } from "naive-ui";
+
+defineProps<{
+    artworks: any;
+}>();
 </script>
 
 <style scoped>

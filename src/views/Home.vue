@@ -1,6 +1,9 @@
 <template>
     <ui-level class="flex-col">
-        <HomeHeader v-if="artworks" :artworks="shuffle(artworks.data.data)" />
+        <HomeHeader
+            v-if="artworks"
+            :artworks="shuffle(artworks.data.data.slice(0, 3))"
+        />
         <HomeGrid v-if="artworks" :grid-array="shuffle(artworks.data.data)" />
         <HomeFooter />
         <!-- <HomeArtWork :artwork="artwork?.data.data" /> -->

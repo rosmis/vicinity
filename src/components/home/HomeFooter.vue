@@ -3,7 +3,10 @@
         <ui-level>
             <ui-level class="flex-col" vertical-align="top">
                 <router-link :to="{ name: 'Home' }">
-                    <img src="../../assets/LOGO.png" alt="logo vicinity" />
+                    <img
+                        src="https://res.cloudinary.com/dgbuqclbx/image/upload/v1681475001/LOGO_rrvawj.png"
+                        alt="logo vicinity"
+                    />
                 </router-link>
                 <p class="text-white text-xs">
                     ©2023 Vicinity Art, <br />
