@@ -34,14 +34,13 @@ import { headerOptions } from "../composables/useHeadersToken";
 const container = ref<Element>();
 
 onMounted(() => {
-    const options = {
-        container: container.value!,
-        renderer: "svg",
+    const params = {
+        container: container.value,
         loop: true,
         autoplay: true,
         animationData: animationData,
     };
-    lottie.loadAnimation(options);
+    lottie.loadAnimation(params);
 });
 
 // const route = useRoute();
