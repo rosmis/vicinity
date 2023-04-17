@@ -31,7 +31,7 @@ import { useQuery } from "vue-query";
 import animationData from "../assets/bouton randomize lottie.json";
 import { headerOptions } from "../composables/useHeadersToken";
 
-const container = ref<Element>();
+const container = ref<Element | undefined>();
 
 onMounted(() => {
     const params = {
