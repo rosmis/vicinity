@@ -1,5 +1,5 @@
 <template>
-    <ui-page :screen="isMobile ? '' : 'screen'">
+    <ui-page :screen="isMobile ? '' : 'custom'">
         <ui-level class="flex-col h-full">
             <ui-wrapper class="w-full" :class="{ 'h-full': !isMobile }">
                 <ui-level
@@ -32,7 +32,12 @@
                         <a href="#artgrid">Discover more</a>
                     </ui-level>
 
-                    <div class="h-full w-full">
+                    <div
+                        :class="{
+                            'h-full w-full': isMobile,
+                            'flex-1': !isMobile,
+                        }"
+                    >
                         <n-carousel
                             effect="card"
                             prev-slide-style="transform: translateX(-150%) translateZ(-800px);"
@@ -40,7 +45,6 @@
                             style="height: 400px"
                             autoplay
                             :show-dots="false"
-                            class="flex-1"
                         >
                             <n-carousel-item
                                 v-for="(item, index) in artworks"
