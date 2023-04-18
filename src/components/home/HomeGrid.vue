@@ -1,6 +1,9 @@
 <template>
     <ui-wrapper id="artgrid" padded class="w-full">
-        <p v-if="isMobile" class="font-semibold text-xl mb-4 leading-relaxed">
+        <p
+            v-if="isMobile"
+            class="font-semibold mt-12 text-xl mb-4 leading-relaxed"
+        >
             Dive into a unique digital experience, through the secret garden of
             our emerging artists, from all over the world. Explore, record,
             share, contact... Let yourself be carried away by the universes and
