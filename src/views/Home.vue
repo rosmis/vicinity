@@ -3,8 +3,13 @@
         <HomeHeader
             v-if="artworks"
             :artworks="shuffle(artworks.data.data.slice(0, 3))"
+            :is-mobile="isMobile"
         />
-        <HomeGrid v-if="artworks" :grid-array="shuffle(artworks.data.data)" />
+        <HomeGrid
+            v-if="artworks"
+            :grid-array="shuffle(artworks.data.data)"
+            :is-mobile="isMobile"
+        />
         <HomeFooter />
 
         <n-tooltip placement="left" trigger="hover">
@@ -30,6 +35,7 @@ import { onMounted, ref } from "vue";
 import { useQuery } from "vue-query";
 import animationData from "../assets/bouton randomize lottie.json";
 import { headerOptions } from "../composables/useHeadersToken";
+import { useMobileBreakpoint } from "../composables/useMobileBreakpoints";
 
 const container = ref<Element>();
 
@@ -42,6 +48,8 @@ onMounted(() => {
     };
     lottie.loadAnimation(params);
 });
+
+const isMobile = useMobileBreakpoint("md");
 
 // const route = useRoute();
 

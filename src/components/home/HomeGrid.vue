@@ -1,7 +1,14 @@
 <template>
     <ui-wrapper id="artgrid" padded class="w-full">
+        <p v-if="isMobile" class="font-semibold text-xl mb-4 leading-relaxed">
+            Dive into a unique digital experience, through the secret garden of
+            our emerging artists, from all over the world. Explore, record,
+            share, contact... Let yourself be carried away by the universes and
+            styles gathered by our team at Vicinity.
+        </p>
         <div class="grid-container justify-center" ref="gridRef">
             <p
+                v-if="!isMobile"
                 class="font-semibold leading-relaxed text-4xl col-span-3"
                 ref="introText"
                 :style="{
@@ -43,6 +50,7 @@ import { onMounted, ref } from "vue";
 
 defineProps<{
     gridArray: any;
+    isMobile: boolean;
 }>();
 
 const ratioGrid = ref<number>();

@@ -1,10 +1,28 @@
 <template>
-    <ui-page screen="custom">
+    <ui-page :screen="isMobile ? '' : 'screen'">
         <ui-level class="flex-col h-full">
-            <ui-wrapper class="h-full w-full">
-                <ui-level class="h-full">
-                    <ui-level class="flex-col flex-1" vertical-align="top">
-                        <h1 class="font-semibold mb-4 text-5xl">
+            <ui-wrapper class="w-full" :class="{ 'h-full': !isMobile }">
+                <ui-level
+                    class="h-full"
+                    :class="{
+                        'flex-col': isMobile,
+                    }"
+                    :space="isMobile ? 'xl' : null"
+                >
+                    <ui-level
+                        class="flex-col flex-1"
+                        vertical-align="top"
+                        :align="isMobile ? 'left' : ''"
+                        :class="{
+                            'mt-4': isMobile,
+                        }"
+                    >
+                        <h1
+                            class="font-semibold text-5xl"
+                            :class="{
+                                'mb-4': !isMobile,
+                            }"
+                        >
                             We bring artists to light
                         </h1>
                         <p class="text-xl mb-2">
@@ -14,53 +32,62 @@
                         <a href="#artgrid">Discover more</a>
                     </ui-level>
 
-                    <n-carousel
-                        effect="card"
-                        prev-slide-style="transform: translateX(-150%) translateZ(-800px);"
-                        next-slide-style="transform: translateX(50%) translateZ(-800px);"
-                        style="height: 400px"
-                        autoplay
-                        :show-dots="false"
-                        class="flex-1"
-                    >
-                        <n-carousel-item
-                            v-for="(item, index) in artworks"
-                            :style="{ width: '60%' }"
+                    <div class="h-full w-full">
+                        <n-carousel
+                            effect="card"
+                            prev-slide-style="transform: translateX(-150%) translateZ(-800px);"
+                            next-slide-style="transform: translateX(50%) translateZ(-800px);"
+                            style="height: 400px"
+                            autoplay
+                            :show-dots="false"
+                            class="flex-1"
                         >
-                            <img
-                                class="carousel-img"
-                                :src="
-                                    item.attributes?.mainImage.data.attributes
-                                        ?.formats.small.url
-                                "
-                                :key="`home${index}`"
-                            />
-                        </n-carousel-item>
+                            <n-carousel-item
+                                v-for="(item, index) in artworks"
+                                :style="{ width: '60%' }"
+                            >
+                                <img
+                                    class="carousel-img"
+                                    :src="
+                                        item.attributes?.mainImage.data
+                                            .attributes?.formats.small.url
+                                    "
+                                    :key="`home${index}`"
+                                />
+                            </n-carousel-item>
 
-                        <template #arrow="{ prev, next }">
-                            <div class="custom-arrow">
-                                <button
-                                    type="button"
-                                    class="custom-arrow--left"
-                                    @click="prev"
-                                >
-                                    <n-icon><ArrowBack /></n-icon>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="custom-arrow--right"
-                                    @click="next"
-                                >
-                                    <n-icon><ArrowForward /></n-icon>
-                                </button>
-                            </div>
-                        </template>
-                    </n-carousel>
+                            <template #arrow="{ prev, next }">
+                                <div class="custom-arrow">
+                                    <button
+                                        type="button"
+                                        class="custom-arrow--left"
+                                        @click="prev"
+                                    >
+                                        <n-icon><ArrowBack /></n-icon>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="custom-arrow--right"
+                                        @click="next"
+                                    >
+                                        <n-icon><ArrowForward /></n-icon>
+                                    </button>
+                                </div>
+                            </template>
+                        </n-carousel>
+                    </div>
                 </ui-level>
             </ui-wrapper>
 
-            <ui-level class="bg-[#3A3A3A] h-20 w-full" align="center">
-                <p class="text-white text-2xl">
+            <ui-level
+                class="bg-[#3A3A3A] w-full"
+                align="center"
+                :class="{ 'p-4': isMobile, 'h-20': !isMobile }"
+            >
+                <p
+                    class="text-white text-2xl"
+                    :class="{ 'text-center': isMobile }"
+                >
                     <span class="italic"
                         >“Art is never finished, only abandoned”</span
                     >
@@ -77,6 +104,7 @@ import { NCarousel } from "naive-ui";
 
 defineProps<{
     artworks: any;
+    isMobile: boolean;
 }>();
 </script>
 
