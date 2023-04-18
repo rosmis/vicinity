@@ -1,5 +1,5 @@
 <template>
-    <ui-level class="flex-col">
+    <ui-level class="flex-col" :class="{ fixed: artwork && selectedArtworkId }">
         <HomeHeader
             v-if="artworks"
             :artworks="shuffle(artworks.data.data.slice(0, 3))"
