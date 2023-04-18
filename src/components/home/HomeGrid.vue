@@ -36,7 +36,7 @@
                         item.attributes?.mainImage.data.attributes?.formats
                             .small.height
                     "
-                    :column-width="200"
+                    :column-width="isMobile ? 150 : 200"
                     :image-index="item.id"
                     :ratio="item.attributes.format"
                 />
@@ -70,5 +70,14 @@ onMounted(() => {
     grid-template-columns: repeat(auto-fill, 200px);
     grid-auto-rows: minmax(16px, auto);
     grid-gap: 16px;
+}
+
+@media screen and (max-width: 769px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 150px);
+        grid-auto-rows: minmax(16px, auto);
+        grid-gap: 16px;
+    }
 }
 </style>
