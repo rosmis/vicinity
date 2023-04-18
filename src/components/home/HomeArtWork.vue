@@ -4,9 +4,9 @@
     >
         <div
             screen="art"
-            class="h-full bg-red-400 rounded-t-2xl w-full top-8 right-0 bottom-0 left-0 absolute"
+            class="bg-white rounded-t-2xl w-full top-8 right-0 bottom-0 left-0 absolute overflow-y-auto"
         >
-            <ui-level align="right" class="w-full pt-4 pr-4 z-99">
+            <ui-level align="right" class="w-full pt-4 pr-4 z-10">
                 <n-icon class="cursor-pointer" @click="emit('close')"
                     ><Close
                 /></n-icon>
@@ -16,31 +16,39 @@
                 <ui-level class="h-full">
                     <ui-level
                         v-if="artwork"
-                        class="flex-col h-full bg-blue-500 w-1/2"
+                        class="flex-col h-full"
                         vertical-align="top"
                         align="left"
                     >
-                        <div class="w-full">
-                            <h1 class="text-right w-full text-2xl">
-                                "{{ artwork.attributes.title }}"
-                            </h1>
-                            <h1 class="text-right text-xl w-full">
-                                By
-                                {{
-                                    artwork.attributes.artists.data[0]
-                                        .attributes.fullName
-                                }}
-                            </h1>
-                        </div>
-                        <p>{{ artwork.attributes.description }}</p>
+                        <ui-level class="flex-col top-24 right-0 left-0 sticky">
+                            <div>
+                                <h1 class="text-right w-full text-2xl">
+                                    "{{
+                                        artwork.attributes.title
+                                            ? artwork.attributes.title
+                                            : `Untitled ${artwork.id}`
+                                    }}"
+                                </h1>
+                                <h1 class="text-right text-xl w-full">
+                                    By
+                                    {{
+                                        artwork.attributes.artists.data[0]
+                                            .attributes.fullName
+                                    }}
+                                </h1>
+                            </div>
+                            <p>{{ artwork.attributes.description }}</p>
+                        </ui-level>
                     </ui-level>
+
                     <div
                         ref="imageColumn"
-                        class="flex h-full bg-green-500 w-1/2 items-center justify-center"
+                        class="flex flex-col h-full bg-green-400 w-1/2 items-start justify-center"
                     >
-                        <Transition v-if="isImageHovered" name="fade">
-                            <div class="inset-0 absolute filterBlur"></div>
-                        </Transition>
+                        <div
+                            v-if="isImageHovered"
+                            class="inset-0 absolute filterBlur"
+                        ></div>
                         <div
                             v-if="artwork"
                             :style="{
@@ -51,6 +59,8 @@
                             @mouseover="isImageHovered = true"
                             @mouseleave="isImageHovered = false"
                         ></div>
+
+                        <h1 class="text-2xl">Images aditionnelles</h1>
                     </div>
                 </ui-level>
             </ui-wrapper>
@@ -95,21 +105,41 @@ const formattedImageHeight = computed(() => {
     transition: all 0.2s ease-in-out;
 }
 
-.filterBlur {
-    backdrop-filter: blur(10px);
-}
-
 .hoverEffect:hover {
     transform: scale(1.3);
 }
 
-.fade-enter,
-.fade-leave-to {
-    @apply opacity-0;
+.filterBlur {
+    backdrop-filter: blur(5px);
 }
 
-.fade-enter-active,
-.fade-leave-active {
-    @apply transition-opacity duration-150;
+.whiteGradient {
+    background: linear-gradient(
+        0deg,
+        rgba(140, 27, 27, 1) 0%,
+        rgba(156, 37, 37, 0.2) 100%
+    );
+
+    /* background: linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0.2) 100%
+    ); */
 }
+
+/* TODO fix the transition ppty so it fades in and out for the backdrop-filter ppty */
+
+/* .fade-enter,
+.fade-leave-to {
+    backdrop-filter: blur(0px);
+}
+
+.fade-enter-active {
+    transition: backdrop-filter 1s ease-in-out;
+    backdrop-filter: blur(10px);
+}
+.fade-leave-active {
+    transition: backdrop-filter 1s ease-in-out;
+    backdrop-filter: blur(0px);
+} */
 </style>
