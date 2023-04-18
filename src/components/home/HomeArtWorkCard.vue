@@ -57,7 +57,7 @@ const props = defineProps<{
 
 const router = useRouter();
 
-const realImageHeight = ref<Number>();
+const realImageHeight = ref<number>();
 const ratioGrid = ref<number>();
 
 onMounted(() => {

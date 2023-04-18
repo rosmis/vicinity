@@ -11,13 +11,20 @@
             <template #trigger>
                 <div
                     ref="container"
-                    class="bg-white rounded-full cursor-pointer shadow-xl p-2 right-4 bottom-4 w-20 z-30 fixed"
+                    class="bg-white rounded-full cursor-pointer h-20 shadow-xl p-2 right-4 bottom-4 w-20 z-30 fixed"
                 ></div>
             </template>
             Coming soon...
         </n-tooltip>
 
-        <!-- <HomeArtWork :artwork="artwork?.data.data" /> -->
+        <HomeArtWork
+            v-if="artwork && selectedArtworkId"
+            :artwork="artwork?.data.data"
+            @close="
+                selectedArtworkId = undefined;
+                router.push({ name: 'Home', query: {} });
+            "
+        />
     </ui-level>
 </template>
 
@@ -26,8 +33,9 @@ import axios from "axios";
 import { shuffle } from "lodash";
 import lottie from "lottie-web";
 import { NTooltip } from "naive-ui";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
+import { useRoute, useRouter } from "vue-router";
 import animationData from "../assets/bouton randomize lottie.json";
 import { headerOptions } from "../composables/useHeadersToken";
 
@@ -43,9 +51,10 @@ onMounted(() => {
     lottie.loadAnimation(params);
 });
 
-// const route = useRoute();
+const route = useRoute();
+const router = useRouter();
 
-// const selectedArtworkId = ref<number>();
+const selectedArtworkId = ref<number>();
 
 const { data: artworks } = useQuery(
     ["artworks"],
@@ -56,26 +65,29 @@ const { data: artworks } = useQuery(
             }/api/artworks?populate=*&pagination[pageSize]=50`,
             headerOptions
         ),
-    { refetchOnWindowFocus: false }
+    { refetchOnWindowFocus: false, keepPreviousData: true }
 );
 
-// const { data: artwork } = useQuery(
-//     ["artworks", selectedArtworkId.value],
-//     () =>
-//         axios.get(
-//             `${import.meta.env.VITE_STRAPI_URL}/api/artworks/${
-//                 selectedArtworkId.value
-//             }?populate=*`,
-//             headerOptions
-//         ),
-//     { enabled: computed(() => !!selectedArtworkId.value) }
-// );
+const { data: artwork } = useQuery(
+    ["artworks", selectedArtworkId.value],
+    () =>
+        axios.get(
+            `${import.meta.env.VITE_STRAPI_URL}/api/artworks/${
+                selectedArtworkId.value
+            }?populate=*`,
+            headerOptions
+        ),
+    {
+        enabled: computed(() => !!selectedArtworkId.value),
+        refetchOnWindowFocus: false,
+    }
+);
 
-// watch(
-//     () => route.query,
-//     () => {
-//         selectedArtworkId.value = route.query.artworkId;
-//         console.log(route.query);
-//     }
-// );
+watch(
+    () => route.query,
+    () => {
+        selectedArtworkId.value = route.query.artworkId;
+        console.log(route.query);
+    }
+);
 </script>
