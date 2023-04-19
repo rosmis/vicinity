@@ -252,7 +252,7 @@ function scrollToTop() {
 watch(
     () => route.query,
     () => {
-        selectedArtworkId.value = +route.query.artworkId;
+        selectedArtworkId.value = +route.query.artworkId!;
         scrollToTop();
     }
 );

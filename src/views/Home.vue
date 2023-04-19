@@ -44,7 +44,7 @@ const selectedArtworkId = ref<number>();
 const initialArtworks = ref();
 
 onMounted(() => {
-    if (route.query) selectedArtworkId.value = +route.query.artworkId;
+    if (route.query) selectedArtworkId.value = +route.query.artworkId!;
 
     const params = {
         container: container.value!,
@@ -79,7 +79,7 @@ const { data: artworks } = useQuery(
 watch(
     () => route.query,
     () => {
-        selectedArtworkId.value = +route.query.artworkId;
+        selectedArtworkId.value = +route.query.artworkId!;
     }
 );
 </script>
