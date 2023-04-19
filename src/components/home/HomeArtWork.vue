@@ -5,6 +5,7 @@
         <div
             screen="art"
             class="bg-white rounded-t-2xl w-full top-8 right-0 bottom-0 left-0 absolute overflow-y-auto"
+            id="mainContainer"
         >
             <ui-level
                 align="right"
@@ -71,7 +72,7 @@
                             <div
                                 v-if="artwork"
                                 :style="{
-                                    backgroundImage: `url(${artwork.data.data.attributes?.mainImage.data.attributes?.formats.medium.url})`,
+                                    backgroundImage: `url(${artwork.data.data.attributes?.mainImage.data.attributes?.formats.small.url})`,
                                     height: `${formattedImageHeight}px`,
                                     transformOrigin: `${
                                         mainImageRatio === 'landscape' ||
@@ -102,13 +103,13 @@
                                         .attributes.aditionnalImages.data"
                                     :key="index"
                                     :image-source="
-                                        item.attributes.formats.medium.url
+                                        item.attributes.formats.small.url
                                     "
                                     :image-width="
-                                        item.attributes.formats.medium.width
+                                        item.attributes.formats.small.width
                                     "
                                     :image-height="
-                                        item.attributes.formats.medium.height
+                                        item.attributes.formats.small.height
                                     "
                                     :column-width="200"
                                     :image-index="item.id"
@@ -134,15 +135,15 @@
                                     :key="index"
                                     :image-source="
                                         item.attributes.mainImage.data
-                                            .attributes.formats.medium.url
+                                            .attributes.formats.small.url
                                     "
                                     :image-width="
                                         item.attributes.mainImage.data
-                                            .attributes.formats.medium.width
+                                            .attributes.formats.small.width
                                     "
                                     :image-height="
                                         item.attributes.mainImage.data
-                                            .attributes.formats.medium.height
+                                            .attributes.formats.small.height
                                     "
                                     :column-width="200"
                                     :image-index="item.id"
@@ -160,7 +161,7 @@
 <script lang="ts" setup>
 import { Close } from "@vicons/ionicons5";
 import axios from "axios";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
 import { headerOptions } from "../../composables/useHeadersToken";
@@ -232,18 +233,27 @@ const mainImageRatio = computed(() => {
 const formattedImageHeight = computed(() => {
     const artWorkImage =
         artwork.value?.data.data.attributes?.mainImage.data.attributes?.formats
-            .medium;
+            .small;
 
     return (
         imageColumnWidth.value! * (+artWorkImage.height / +artWorkImage.width)
     );
 });
 
+function scrollToTop() {
+    nextTick(() => {
+        window.scroll({
+            behavior: "smooth",
+            top: document.getElementById("mainContainer")?.offsetTop,
+        });
+    });
+}
+
 watch(
     () => route.query,
     () => {
         selectedArtworkId.value = +route.query.artworkId;
-        console.log(selectedArtworkId.value);
+        scrollToTop();
     }
 );
 </script>

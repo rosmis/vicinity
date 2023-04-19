@@ -1,10 +1,10 @@
 <template>
     <ui-level class="flex-col">
         <HomeHeader
-            v-if="artworks"
-            :artworks="shuffle(artworks.data.data.slice(0, 3))"
+            v-if="initialArtworks"
+            :artworks="initialArtworks.slice(0, 3)"
         />
-        <HomeGrid v-if="artworks" :grid-array="shuffle(artworks.data.data)" />
+        <HomeGrid v-if="initialArtworks" :grid-array="initialArtworks" />
         <HomeFooter />
 
         <n-tooltip placement="left" trigger="hover">
@@ -41,6 +41,7 @@ import { headerOptions } from "../composables/useHeadersToken";
 
 const container = ref<Element>();
 const selectedArtworkId = ref<number>();
+const initialArtworks = ref();
 
 onMounted(() => {
     if (route.query) selectedArtworkId.value = +route.query.artworkId;
@@ -66,7 +67,13 @@ const { data: artworks } = useQuery(
             }/api/artworks?populate=*&pagination[pageSize]=50`,
             headerOptions
         ),
-    { refetchOnWindowFocus: false, keepPreviousData: true }
+    {
+        onSuccess: (artworks) => {
+            initialArtworks.value = shuffle(artworks.data.data);
+        },
+        refetchOnWindowFocus: false,
+        keepPreviousData: true,
+    }
 );
 
 watch(
