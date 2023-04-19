@@ -1,5 +1,5 @@
 <template>
-    <ui-level class="flex-col" :class="{ fixed: artwork && selectedArtworkId }">
+    <ui-level class="flex-col">
         <HomeHeader
             v-if="artworks"
             :artworks="shuffle(artworks.data.data.slice(0, 3))"
@@ -18,8 +18,8 @@
         </n-tooltip>
 
         <HomeArtWork
-            v-if="artwork && selectedArtworkId"
-            :artwork="artwork?.data.data"
+            v-if="selectedArtworkId"
+            :selected-artwork-id="selectedArtworkId"
             @close="
                 selectedArtworkId = undefined;
                 router.push({ name: 'Home', query: {} });
@@ -33,15 +33,18 @@ import axios from "axios";
 import { shuffle } from "lodash";
 import lottie from "lottie-web";
 import { NTooltip } from "naive-ui";
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute, useRouter } from "vue-router";
 import animationData from "../assets/bouton randomize lottie.json";
 import { headerOptions } from "../composables/useHeadersToken";
 
 const container = ref<Element>();
+const selectedArtworkId = ref<number>();
 
 onMounted(() => {
+    if (route.query) selectedArtworkId.value = +route.query.artworkId;
+
     const params = {
         container: container.value!,
         loop: true,
@@ -51,13 +54,11 @@ onMounted(() => {
     lottie.loadAnimation(params);
 });
 
-const route = useRoute();
 const router = useRouter();
-
-const selectedArtworkId = ref<number>();
+const route = useRoute();
 
 const { data: artworks } = useQuery(
-    ["artworks"],
+    ["artworks", route.query.artworkId],
     () =>
         axios.get(
             `${
@@ -68,26 +69,10 @@ const { data: artworks } = useQuery(
     { refetchOnWindowFocus: false, keepPreviousData: true }
 );
 
-const { data: artwork } = useQuery(
-    ["artworks", selectedArtworkId.value],
-    () =>
-        axios.get(
-            `${import.meta.env.VITE_STRAPI_URL}/api/artworks/${
-                selectedArtworkId.value
-            }?populate=*`,
-            headerOptions
-        ),
-    {
-        enabled: computed(() => !!selectedArtworkId.value),
-        refetchOnWindowFocus: false,
-    }
-);
-
 watch(
     () => route.query,
     () => {
-        selectedArtworkId.value = route.query.artworkId;
-        console.log(route.query);
+        selectedArtworkId.value = +route.query.artworkId;
     }
 );
 </script>

@@ -12,7 +12,8 @@
             "
         >
             <div
-                class="bg-contain bg-no-repeat rounded-lg h-full w-full hover"
+                class="bg-contain bg-no-repeat rounded-lg h-full w-full"
+                :class="{ hover: !disableHover }"
                 :style="{
                     backgroundImage: `url(${imageSource})`,
                 }"
@@ -26,9 +27,13 @@
                 gridRowEnd: `span ${ratioGrid + 2}`,
                 height: `${columnWidth}px`,
             }"
+            @click="
+                router.push({ name: 'Home', query: { artworkId: imageIndex } })
+            "
         >
             <div
-                class="bg-contain bg-no-repeat rounded-lg h-full w-full hover"
+                class="bg-contain bg-no-repeat rounded-lg h-full w-full"
+                :class="{ hover: !disableHover }"
                 :style="{
                     backgroundImage: `url(${imageSource})`,
                 }"
@@ -54,9 +59,11 @@ const props = withDefaults(
         imageWidth: number;
         ratio?: "square" | "portrait" | "blank";
         columnWidth: number;
+        disableHover?: boolean;
     }>(),
     {
         ratio: "portrait",
+        disableHover: false,
     }
 );
 
