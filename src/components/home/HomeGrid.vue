@@ -1,6 +1,6 @@
 <template>
     <ui-wrapper id="artgrid" padded class="w-full">
-        <div class="grid-container justify-center" ref="gridRef">
+        <div class="grid-container justify-center">
             <p
                 class="font-semibold leading-relaxed text-4xl col-span-3"
                 ref="introText"

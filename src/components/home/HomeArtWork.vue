@@ -13,14 +13,17 @@
             </ui-level>
 
             <ui-wrapper padded class="h-full">
-                <ui-level class="h-full">
+                <ui-level class="h-full" space="lg">
                     <ui-level
                         v-if="artwork"
-                        class="flex-col h-full"
+                        class="flex-col h-full w-1/2"
                         vertical-align="top"
                         align="left"
                     >
-                        <ui-level class="flex-col top-24 right-0 left-0 sticky">
+                        <ui-level
+                            class="flex-col w-full top-24 right-0 left-0 sticky"
+                            vertical-align="bottom"
+                        >
                             <div>
                                 <h1 class="text-right w-full text-2xl">
                                     "{{
@@ -43,24 +46,51 @@
 
                     <div
                         ref="imageColumn"
-                        class="flex flex-col h-full bg-green-400 w-1/2 items-start justify-center"
+                        class="flex flex-col h-full w-1/2 items-start justify-start"
                     >
-                        <div
-                            v-if="isImageHovered"
-                            class="inset-0 absolute filterBlur"
-                        ></div>
-                        <div
-                            v-if="artwork"
-                            :style="{
-                                backgroundImage: `url(${artwork.attributes?.mainImage.data.attributes?.formats.medium.url})`,
-                                height: `${formattedImageHeight}px`,
-                            }"
-                            class="bg-cover bg-no-repeat cursor-pointer z-10 hoverEffect"
-                            @mouseover="isImageHovered = true"
-                            @mouseleave="isImageHovered = false"
-                        ></div>
+                        <ui-level class="my-6 w-full" align="center">
+                            <div
+                                v-if="isImageHovered"
+                                class="inset-0 absolute filterBlur"
+                            ></div>
+                            <div
+                                v-if="artwork"
+                                :style="{
+                                    backgroundImage: `url(${artwork.attributes?.mainImage.data.attributes?.formats.medium.url})`,
+                                    height: `${formattedImageHeight}px`,
+                                }"
+                                class="bg-cover bg-no-repeat cursor-pointer z-10 hoverEffect"
+                                @mouseover="isImageHovered = true"
+                                @mouseleave="isImageHovered = false"
+                            ></div>
+                        </ui-level>
 
-                        <h1 class="text-2xl">Images aditionnelles</h1>
+                        <template
+                            v-if="artwork.attributes.aditionnalImages.data"
+                        >
+                            <h1 class="mt-[8%] mb-4 text-2xl">
+                                Aditionnal images
+                            </h1>
+
+                            <div class="w-full grid-container justify-center">
+                                <HomeArtWorkCard
+                                    v-for="(item, index) in artwork.attributes
+                                        .aditionnalImages.data"
+                                    :key="index"
+                                    :image-source="
+                                        item.attributes.formats.medium.url
+                                    "
+                                    :image-width="
+                                        item.attributes.formats.medium.width
+                                    "
+                                    :image-height="
+                                        item.attributes.formats.medium.height
+                                    "
+                                    :column-width="200"
+                                    :image-index="item.id"
+                                />
+                            </div>
+                        </template>
                     </div>
                 </ui-level>
             </ui-wrapper>
@@ -81,7 +111,7 @@ const emit = defineEmits<{
 }>();
 
 onMounted(() => {
-    imageColumnWidth.value = imageColumn.value!.clientWidth * 0.8;
+    imageColumnWidth.value = imageColumn.value!.clientWidth * 0.6;
 });
 
 const imageColumn = ref<HTMLDivElement>();
@@ -100,7 +130,7 @@ const formattedImageHeight = computed(() => {
 
 <style scoped>
 .hoverEffect {
-    width: 80%;
+    width: 60%;
     transform-origin: center center;
     transition: all 0.2s ease-in-out;
 }
@@ -125,6 +155,13 @@ const formattedImageHeight = computed(() => {
         rgba(255, 255, 255, 1) 0%,
         rgba(255, 255, 255, 0.2) 100%
     ); */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    grid-auto-rows: minmax(16px, auto);
+    grid-gap: 16px;
 }
 
 /* TODO fix the transition ppty so it fades in and out for the backdrop-filter ppty */

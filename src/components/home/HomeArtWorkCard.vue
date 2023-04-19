@@ -46,14 +46,19 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-const props = defineProps<{
-    imageSource: string;
-    imageHeight: number;
-    imageIndex: number;
-    imageWidth: number;
-    ratio: "square" | "portrait" | "blank";
-    columnWidth: number;
-}>();
+const props = withDefaults(
+    defineProps<{
+        imageSource: string;
+        imageHeight: number;
+        imageIndex: number;
+        imageWidth: number;
+        ratio?: "square" | "portrait" | "blank";
+        columnWidth: number;
+    }>(),
+    {
+        ratio: "portrait",
+    }
+);
 
 const router = useRouter();
 
