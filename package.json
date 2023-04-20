@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@splitbee/web": "^0.3.0",
     "@vicons/ionicons5": "^0.12.0",
     "@vueuse/core": "^10.0.2",
     "axios": "^1.3.2",
