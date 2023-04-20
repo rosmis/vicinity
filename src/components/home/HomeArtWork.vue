@@ -5,6 +5,7 @@
         <div
             screen="art"
             class="bg-white rounded-t-2xl w-full top-8 right-0 bottom-0 left-0 absolute overflow-y-auto"
+            ref="outsideWrapper"
             id="mainContainer"
         >
             <ui-level
@@ -72,7 +73,13 @@
                             <div
                                 v-if="artwork"
                                 :style="{
-                                    backgroundImage: `url(${artwork.data.data.attributes?.mainImage.data.attributes?.formats.small.url})`,
+                                    backgroundImage: `url(${
+                                        mainArtworkFormat[
+                                            mainArtworkFormat?.medium
+                                                ? 'medium'
+                                                : 'small'
+                                        ].url
+                                    })`,
                                     height: `${formattedImageHeight}px`,
                                     transformOrigin: `${
                                         mainImageRatio === 'landscape' ||
@@ -122,7 +129,7 @@
                             v-if="
                                 artworksByArtist && artworksByArtist?.data.data
                             "
-                            class="mt-[8%] w-full relative"
+                            class="mt-[8%] w-full"
                         >
                             <h1 class="mb-4 text-2xl">
                                 Discover more about this artist...
@@ -160,6 +167,7 @@
 
 <script lang="ts" setup>
 import { Close } from "@vicons/ionicons5";
+import { onClickOutside } from "@vueuse/core";
 import axios from "axios";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
@@ -182,6 +190,7 @@ onMounted(() => {
 
 const imageColumn = ref<HTMLDivElement>();
 const gridContainer = ref<HTMLDivElement>();
+const outsideWrapper = ref<HTMLDivElement>();
 
 const imageColumnWidth = ref<number>();
 const isImageHovered = ref(false);
@@ -210,6 +219,8 @@ const { data: artworksByArtist } = useQuery(
                 import.meta.env.VITE_STRAPI_URL
             }/api/artworks?filters[artists][id][$eq]=${
                 artwork.value?.data.data.attributes.artists.data[0].id
+            }&filters[id][$ne]=${
+                artwork.value?.data.data.id
             }&populate=mainImage`,
             headerOptions
         ),
@@ -219,10 +230,17 @@ const { data: artworksByArtist } = useQuery(
     }
 );
 
+onClickOutside(outsideWrapper, (_event) => emit("close"));
+
+const mainArtworkFormat = computed(
+    () => artwork.value?.data.data.attributes.mainImage.data.attributes.formats
+);
+
 const mainImageRatio = computed(() => {
     const artWorkImage =
-        artwork.value?.data.data.attributes?.mainImage.data.attributes?.formats
-            .medium;
+        artwork.value?.data.data.attributes?.mainImage.data.attributes?.formats[
+            mainArtworkFormat?.medium ? "medium" : "small"
+        ];
 
     if (artWorkImage.height === artWorkImage.width) return "square";
     if (artWorkImage.height < artWorkImage.width) return "landscape";

@@ -58,7 +58,7 @@ onMounted(() => {
 const router = useRouter();
 const route = useRoute();
 
-const { data: artworks } = useQuery(
+const { data: _artworks } = useQuery(
     ["artworks", route.query.artworkId],
     () =>
         axios.get(
