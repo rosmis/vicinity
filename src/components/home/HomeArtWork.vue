@@ -18,18 +18,19 @@
             </ui-level>
 
             <ui-wrapper padded class="h-full">
-                <ui-level class="h-full" space="lg">
+                <ui-level class="h-full" space="lg" vertical-align="top">
                     <ui-level
                         v-if="artwork"
-                        class="flex-col h-full w-2/5"
-                        vertical-align="top"
-                        align="left"
+                        class="flex-col bg-green-400 w-2/5"
+                        :style="{
+                            height: `${totalLeftColumnHeight}px`,
+                        }"
                     >
                         <ui-level
                             class="flex-col w-full top-24 right-0 left-0 sticky"
                             vertical-align="bottom"
                         >
-                            <ui-level align="right" space="2xl">
+                            <ui-level align="right" space="xl">
                                 <ui-profile-picture
                                     :user-infos="
                                         artwork.data.data.attributes.artists
@@ -46,6 +47,9 @@
                                                 : `Untitled ${artwork.data.data.id}`
                                         }}"
                                     </h1>
+                                    <pre>
+                                        {{ totalLeftColumnHeight }}
+                                    </pre>
                                     <h1 class="text-right w-full text-2xl">
                                         By
                                         {{
@@ -88,10 +92,30 @@
                                             : 'center center'
                                     }`,
                                 }"
-                                class="bg-cover bg-no-repeat cursor-pointer z-10 hoverEffect"
+                                class="bg-cover bg-no-repeat cursor-pointer z-10 hoverEffect relative"
                                 @mouseover="isImageHovered = true"
                                 @mouseleave="isImageHovered = false"
-                            ></div>
+                            >
+                                <ui-level
+                                    align="center"
+                                    class="rounded-md cursor-pointer p-1 bottom-4 left-4 absolute filterBlur"
+                                    @click="
+                                        downloadFromUrl(
+                                            mainArtworkFormat[
+                                                mainArtworkFormat?.medium
+                                                    ? 'medium'
+                                                    : 'small'
+                                            ].url,
+                                            'test',
+                                            { openInNew: true }
+                                        )
+                                    "
+                                >
+                                    <n-icon size="24" color="white"
+                                        ><DownloadOutline
+                                    /></n-icon>
+                                </ui-level>
+                            </div>
                         </ui-level>
 
                         <div
@@ -100,7 +124,7 @@
                                     .data
                             "
                             class="mt-[8%] w-full"
-                            ref="gridContainer"
+                            ref="gridContainerAditionnal"
                         >
                             <h1 class="mb-4 text-2xl">Aditionnal images</h1>
 
@@ -129,7 +153,8 @@
                             v-if="
                                 artworksByArtist && artworksByArtist?.data.data
                             "
-                            class="mt-[8%] w-full"
+                            class="mt-[8%] w-full pb-12"
+                            ref="gridContainerMore"
                         >
                             <h1 class="mb-4 text-2xl">
                                 Discover more about this artist...
@@ -154,7 +179,6 @@
                                     "
                                     :column-width="200"
                                     :image-index="item.id"
-                                    disable-hover
                                 />
                             </div>
                         </div>
@@ -166,12 +190,13 @@
 </template>
 
 <script lang="ts" setup>
-import { Close } from "@vicons/ionicons5";
+import { Close, DownloadOutline } from "@vicons/ionicons5";
 import { onClickOutside } from "@vueuse/core";
 import axios from "axios";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
+import { downloadFromUrl } from "../../composables/useDownloadFromUrl";
 import { headerOptions } from "../../composables/useHeadersToken";
 
 const props = defineProps<{
@@ -189,12 +214,36 @@ onMounted(() => {
 });
 
 const imageColumn = ref<HTMLDivElement>();
-const gridContainer = ref<HTMLDivElement>();
 const outsideWrapper = ref<HTMLDivElement>();
+const gridContainerAditionnal = ref<HTMLDivElement>();
+const gridContainerMore = ref<HTMLDivElement>();
 
 const imageColumnWidth = ref<number>();
 const isImageHovered = ref(false);
 const selectedArtworkId = ref<number>(props.selectedArtworkId);
+
+const totalLeftColumnHeight = computed(() => {
+    const aditionnalImageColumnHeight = ref(0);
+    const moreImageColumnHeight = ref(0);
+
+    if (artwork.value?.data.data.attributes.aditionnalImages.data) {
+        aditionnalImageColumnHeight.value =
+            gridContainerAditionnal.value?.offsetHeight!;
+        console.log("aditionnal", aditionnalImageColumnHeight.value);
+    }
+
+    if (artworksByArtist.value && artworksByArtist.value?.data.data) {
+        moreImageColumnHeight.value = gridContainerMore.value?.offsetHeight!;
+        console.log("more", moreImageColumnHeight.value);
+    }
+
+    console.log("formattedImageHeight", formattedImageHeight.value + 2 * 24);
+
+    return (
+        formattedImageHeight.value + 2 * 24 + 48 + moreImageColumnHeight.value
+        // aditionnalImageColumnHeight.value
+    );
+});
 
 const { data: artwork } = useQuery(
     ["artwork", selectedArtworkId],
@@ -212,7 +261,7 @@ const { data: artwork } = useQuery(
 );
 
 const { data: artworksByArtist } = useQuery(
-    ["artworksByArtist", selectedArtworkId.value],
+    ["artworksByArtist", selectedArtworkId],
     () =>
         axios.get(
             `${
@@ -229,8 +278,6 @@ const { data: artworksByArtist } = useQuery(
         refetchOnWindowFocus: false,
     }
 );
-
-onClickOutside(outsideWrapper, (_event) => emit("close"));
 
 const mainArtworkFormat = computed(
     () => artwork.value?.data.data.attributes.mainImage.data.attributes.formats
@@ -274,6 +321,8 @@ watch(
         scrollToTop();
     }
 );
+
+onClickOutside(outsideWrapper, (_event) => emit("close"));
 </script>
 
 <style scoped>
@@ -288,20 +337,6 @@ watch(
 
 .filterBlur {
     backdrop-filter: blur(5px);
-}
-
-.whiteGradient {
-    background: linear-gradient(
-        0deg,
-        rgb(255, 255, 255) 0%,
-        rgba(255, 255, 255, 0.2) 100%
-    );
-
-    /* background: linear-gradient(
-        0deg,
-        rgba(255, 255, 255, 1) 0%,
-        rgba(255, 255, 255, 0.2) 100%
-    ); */
 }
 
 .grid-container {
