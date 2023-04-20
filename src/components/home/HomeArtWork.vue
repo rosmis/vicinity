@@ -47,6 +47,7 @@
                                                 : `Untitled ${artwork.data.data.id}`
                                         }}"
                                     </h1>
+
                                     <h1 class="text-right w-full text-2xl">
                                         By
                                         {{
@@ -76,7 +77,9 @@
                                 :style="{
                                     backgroundImage: `url(${
                                         mainArtworkFormat[
-                                            mainArtworkFormat?.medium
+                                            Object.keys(
+                                                mainArtworkFormat
+                                            ).includes('medium')
                                                 ? 'medium'
                                                 : 'small'
                                         ].url
@@ -99,7 +102,9 @@
                                     @click="
                                         downloadFromUrl(
                                             mainArtworkFormat[
-                                                mainArtworkFormat?.medium
+                                                Object.keys(
+                                                    mainArtworkFormat
+                                                ).includes('medium')
                                                     ? 'medium'
                                                     : 'small'
                                             ].url,
@@ -195,6 +200,7 @@ import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
 import { downloadFromUrl } from "../../composables/useDownloadFromUrl";
 import { headerOptions } from "../../composables/useHeadersToken";
+import { Artwork, Artworks } from "../../types/artworks";
 
 const props = defineProps<{
     selectedArtworkId: number;
@@ -249,7 +255,7 @@ const totalLeftColumnHeight = computed(() => {
 const { data: artwork } = useQuery(
     ["artwork", selectedArtworkId],
     () =>
-        axios.get(
+        axios.get<Artwork>(
             `${import.meta.env.VITE_STRAPI_URL}/api/artworks/${
                 selectedArtworkId.value
             }?populate=*&populate=artists.profilePicture,aditionnalImages,mainImage`,
@@ -264,7 +270,7 @@ const { data: artwork } = useQuery(
 const { data: artworksByArtist } = useQuery(
     ["artworksByArtist", selectedArtworkId],
     () =>
-        axios.get(
+        axios.get<Artworks>(
             `${
                 import.meta.env.VITE_STRAPI_URL
             }/api/artworks?filters[artists][id][$eq]=${
@@ -280,7 +286,7 @@ const { data: artworksByArtist } = useQuery(
     }
 );
 
-const mainArtworkFormat = computed<"small" | "medium">(
+const mainArtworkFormat = computed<ArtworkImageFormat>(
     () => artwork.value?.data.data.attributes.mainImage.data.attributes.formats
 );
 
@@ -326,6 +332,17 @@ watch(
 );
 
 onClickOutside(outsideWrapper, (_event) => emit("close"));
+</script>
+
+<script lang="ts">
+interface ArtworkImageFormat {
+    medium: {
+        url: string;
+    };
+    small: {
+        url: string;
+    };
+}
 </script>
 
 <style scoped>

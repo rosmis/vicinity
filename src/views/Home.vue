@@ -3,6 +3,7 @@
         <HomeHeader
             v-if="initialArtworks"
             :artworks="initialArtworks.slice(0, 3)"
+            :is-mobile="isMobile"
         />
         <HomeGrid
             v-if="initialArtworks"
@@ -43,10 +44,11 @@ import { useRoute, useRouter } from "vue-router";
 import animationData from "../assets/bouton randomize lottie.json";
 import { headerOptions } from "../composables/useHeadersToken";
 import { useMobileBreakpoint } from "../composables/useMobileBreakpoints";
+import { ArtworkConfig, Artworks } from "../types/artworks";
 
 const container = ref<Element>();
 const selectedArtworkId = ref<number>();
-const initialArtworks = ref();
+const initialArtworks = ref<ArtworkConfig[]>();
 
 onMounted(() => {
     if (route.query) selectedArtworkId.value = +route.query.artworkId!;
@@ -67,7 +69,7 @@ const isMobile = useMobileBreakpoint("md");
 const { data: _artworks } = useQuery(
     ["artworks", route.query.artworkId],
     () =>
-        axios.get(
+        axios.get<{ data: Artworks }>(
             `${
                 import.meta.env.VITE_STRAPI_URL
             }/api/artworks?populate=*&pagination[pageSize]=50`,

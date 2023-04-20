@@ -50,9 +50,10 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
+import { ArtworkConfig } from "../../types/artworks";
 
 defineProps<{
-    gridArray: any;
+    gridArray: ArtworkConfig[];
     isMobile: boolean;
 }>();
 
