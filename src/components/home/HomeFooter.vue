@@ -15,14 +15,14 @@
             </ui-level>
             <ui-level class="flex-col" vertical-align="bottom">
                 <p class="text-white">Follow us on instagram</p>
-                <router-link
-                    to="https://www.instagram.com/vicinity_art/"
+                <a
+                    href="https://www.instagram.com/vicinity_art/"
                     target="_blank"
                 >
                     <n-icon class="text-white text-3xl"
                         ><LogoInstagram
                     /></n-icon>
-                </router-link>
+                </a>
             </ui-level>
         </ui-level>
     </ui-wrapper>

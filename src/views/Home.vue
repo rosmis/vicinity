@@ -1,26 +1,29 @@
 <template>
     <ui-level class="flex-col">
-        <HomeHeader
-            v-if="initialArtworks"
-            :artworks="initialArtworks.slice(0, 3)"
-            :is-mobile="isMobile"
-        />
-        <HomeGrid
-            v-if="initialArtworks"
-            :grid-array="initialArtworks"
-            :is-mobile="isMobile"
-        />
-        <HomeFooter />
+        <div class="w-full relative">
+            <HomeHeader
+                v-if="initialArtworks"
+                :artworks="initialArtworks.slice(0, 3)"
+                :is-mobile="isMobile"
+            />
+            <HomeGrid
+                v-if="initialArtworks"
+                :grid-array="initialArtworks"
+                :is-mobile="isMobile"
+            />
 
-        <n-tooltip placement="left" trigger="hover">
-            <template #trigger>
-                <div
-                    ref="container"
-                    class="bg-white rounded-full cursor-pointer h-20 shadow-xl p-2 right-4 bottom-4 w-20 z-30 fixed"
-                ></div>
-            </template>
-            Coming soon...
-        </n-tooltip>
+            <n-tooltip placement="left" trigger="hover">
+                <template #trigger>
+                    <div
+                        ref="container"
+                        class="bg-white rounded-full cursor-pointer h-20 shadow-xl p-2 bottom-4 left-[90%] w-20 z-30 sticky"
+                    ></div>
+                </template>
+                Coming soon...
+            </n-tooltip>
+        </div>
+
+        <HomeFooter />
 
         <HomeArtWork
             v-if="selectedArtworkId && !isMobile"
