@@ -1,7 +1,17 @@
 <template>
     <ui-wrapper id="artgrid" padded class="w-full">
-        <div class="grid-container justify-center">
+        <p
+            v-if="isMobile"
+            class="font-semibold mt-12 text-xl mb-4 leading-relaxed"
+        >
+            Dive into a unique digital experience, through the secret garden of
+            our emerging artists, from all over the world. Explore, record,
+            share, contact... Let yourself be carried away by the universes and
+            styles gathered by our team at Vicinity.
+        </p>
+        <div class="grid-container justify-center" ref="gridRef">
             <p
+                v-if="!isMobile"
                 class="font-semibold leading-relaxed text-4xl col-span-3"
                 ref="introText"
                 :style="{
@@ -29,7 +39,7 @@
                         item.attributes?.mainImage.data.attributes?.formats
                             .small.height
                     "
-                    :column-width="200"
+                    :column-width="isMobile ? 130 : 200"
                     :image-index="item.id"
                     :ratio="item.attributes.format"
                 />
@@ -43,6 +53,7 @@ import { onMounted, ref } from "vue";
 
 defineProps<{
     gridArray: any;
+    isMobile: boolean;
 }>();
 
 const ratioGrid = ref<number>();
@@ -62,5 +73,14 @@ onMounted(() => {
     grid-template-columns: repeat(auto-fill, 200px);
     grid-auto-rows: minmax(16px, auto);
     grid-gap: 16px;
+}
+
+@media screen and (max-width: 769px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 130px);
+        grid-auto-rows: minmax(16px, auto);
+        grid-gap: 16px;
+    }
 }
 </style>

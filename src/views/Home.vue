@@ -4,7 +4,11 @@
             v-if="initialArtworks"
             :artworks="initialArtworks.slice(0, 3)"
         />
-        <HomeGrid v-if="initialArtworks" :grid-array="initialArtworks" />
+        <HomeGrid
+            v-if="initialArtworks"
+            :grid-array="initialArtworks"
+            :is-mobile="isMobile"
+        />
         <HomeFooter />
 
         <n-tooltip placement="left" trigger="hover">
@@ -38,6 +42,7 @@ import { useQuery } from "vue-query";
 import { useRoute, useRouter } from "vue-router";
 import animationData from "../assets/bouton randomize lottie.json";
 import { headerOptions } from "../composables/useHeadersToken";
+import { useMobileBreakpoint } from "../composables/useMobileBreakpoints";
 
 const container = ref<Element>();
 const selectedArtworkId = ref<number>();
@@ -57,6 +62,7 @@ onMounted(() => {
 
 const router = useRouter();
 const route = useRoute();
+const isMobile = useMobileBreakpoint("md");
 
 const { data: _artworks } = useQuery(
     ["artworks", route.query.artworkId],
