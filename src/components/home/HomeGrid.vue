@@ -42,6 +42,7 @@
                     :column-width="isMobile ? 130 : 200"
                     :image-index="item.id"
                     :ratio="item.attributes.format"
+                    :is-mobile="isMobile"
                 />
             </template>
         </div>

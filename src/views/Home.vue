@@ -23,7 +23,7 @@
         </n-tooltip>
 
         <HomeArtWork
-            v-if="selectedArtworkId"
+            v-if="selectedArtworkId && !isMobile"
             :selected-artwork-id="selectedArtworkId"
             @close="
                 selectedArtworkId = undefined;
@@ -56,6 +56,8 @@ onMounted(() => {
 
     if (route.query.artworkId) {
         selectedArtworkId.value = +route.query.artworkId!;
+
+        if (!isMobile.value) return;
         document.body.classList.add("no-scroll");
     }
 

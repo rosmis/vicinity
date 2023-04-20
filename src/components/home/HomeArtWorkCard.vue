@@ -74,6 +74,7 @@ const props = withDefaults(
         ratio?: "square" | "portrait" | "blank";
         columnWidth: number;
         disableHover?: boolean;
+        isMobile: boolean;
     }>(),
     {
         ratio: "portrait",
@@ -87,6 +88,7 @@ const realImageHeight = ref<number>();
 const ratioGrid = ref<number>();
 
 function addBodyNoScrollClass() {
+    if (props.isMobile) return;
     document.body.classList.add("no-scroll");
 }
 
