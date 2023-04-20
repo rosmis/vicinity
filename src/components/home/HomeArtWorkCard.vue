@@ -14,7 +14,8 @@
                           name: 'Home',
                           query: { artworkId: imageIndex },
                       })
-                    : undefined
+                    : undefined;
+                addBodyNoScrollClass();
             "
         >
             <div
@@ -40,7 +41,8 @@
                           name: 'Home',
                           query: { artworkId: imageIndex },
                       })
-                    : undefined
+                    : undefined;
+                addBodyNoScrollClass();
             "
         >
             <div
@@ -83,6 +85,10 @@ const router = useRouter();
 
 const realImageHeight = ref<number>();
 const ratioGrid = ref<number>();
+
+function addBodyNoScrollClass() {
+    document.body.classList.add("no-scroll");
+}
 
 onMounted(() => {
     realImageHeight.value =

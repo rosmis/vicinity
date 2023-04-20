@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-col bg-black/15 inset-0 backdrop-filter backdrop-blur-sm fixed overflow-y-auto"
+        class="flex flex-col bg-black/15 inset-0 backdrop-filter backdrop-blur-sm fixed"
     >
         <div
             screen="art"
@@ -315,12 +315,13 @@ const formattedImageHeight = computed(() => {
 });
 
 function scrollToTop() {
-    nextTick(() => {
-        window.scroll({
-            behavior: "smooth",
-            top: document.getElementById("mainContainer")?.offsetTop,
-        });
-    });
+    // nextTick(() => {
+    //     window.scroll({
+    //         behavior: "smooth",
+    //         top: document.getElementById("mainContainer")?.offsetTop,
+    //     });
+    // });
+    console.log("feature coming soon");
 }
 
 watch(

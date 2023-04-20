@@ -27,6 +27,7 @@
             :selected-artwork-id="selectedArtworkId"
             @close="
                 selectedArtworkId = undefined;
+                removeBodyNoScrollClass();
                 router.push({ name: 'Home', query: {} });
             "
         />
@@ -51,7 +52,12 @@ const selectedArtworkId = ref<number>();
 const initialArtworks = ref<ArtworkConfig[]>();
 
 onMounted(() => {
-    if (route.query) selectedArtworkId.value = +route.query.artworkId!;
+    removeBodyNoScrollClass();
+
+    if (route.query.artworkId) {
+        selectedArtworkId.value = +route.query.artworkId!;
+        document.body.classList.add("no-scroll");
+    }
 
     const params = {
         container: container.value!,
@@ -84,6 +90,10 @@ const { data: _artworks } = useQuery(
     }
 );
 
+function removeBodyNoScrollClass() {
+    document.body.classList.remove("no-scroll");
+}
+
 watch(
     () => route.query,
     () => {
@@ -91,3 +101,9 @@ watch(
     }
 );
 </script>
+
+<style>
+.no-scroll {
+    overflow-y: hidden;
+}
+</style>
