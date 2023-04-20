@@ -280,14 +280,16 @@ const { data: artworksByArtist } = useQuery(
     }
 );
 
-const mainArtworkFormat = computed(
+const mainArtworkFormat = computed<"small" | "medium">(
     () => artwork.value?.data.data.attributes.mainImage.data.attributes.formats
 );
 
 const mainImageRatio = computed(() => {
     const artWorkImage =
         artwork.value?.data.data.attributes?.mainImage.data.attributes?.formats[
-            mainArtworkFormat?.medium ? "medium" : "small"
+            Object.keys(mainArtworkFormat.value).includes("medium")
+                ? "medium"
+                : "small"
         ];
 
     if (artWorkImage.height === artWorkImage.width) return "square";
