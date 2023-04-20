@@ -69,7 +69,7 @@ const isMobile = useMobileBreakpoint("md");
 const { data: _artworks } = useQuery(
     ["artworks", route.query.artworkId],
     () =>
-        axios.get<{ data: Artworks }>(
+        axios.get<Artworks>(
             `${
                 import.meta.env.VITE_STRAPI_URL
             }/api/artworks?populate=*&pagination[pageSize]=50`,
