@@ -2,17 +2,25 @@
     <template v-if="imageSource && ratioGrid">
         <div
             v-if="ratio === 'portrait'"
-            class="cursor-pointer w-full wrapper portrait overflow-hidden"
+            class="w-full wrapper portrait overflow-hidden"
+            :class="{ 'cursor-pointer': !disableHover }"
             :style="{
                 height: `${realImageHeight}px`,
                 gridRowEnd: `span ${ratioGrid + 2}`,
             }"
             @click="
-                router.push({ name: 'Home', query: { artworkId: imageIndex } })
+                !disableHover
+                    ? router.push({
+                          name: 'Home',
+                          query: { artworkId: imageIndex },
+                      })
+                    : undefined;
+                addBodyNoScrollClass();
             "
         >
             <div
-                class="bg-contain bg-no-repeat rounded-lg h-full w-full hover"
+                class="bg-contain bg-no-repeat rounded-lg h-full w-full"
+                :class="{ hover: !disableHover }"
                 :style="{
                     backgroundImage: `url(${imageSource})`,
                 }"
@@ -21,14 +29,25 @@
 
         <div
             v-if="ratio === 'square'"
-            class="cursor-pointer w-full wrapper overflow-hidden"
+            class="w-full wrapper overflow-hidden"
             :style="{
                 gridRowEnd: `span ${ratioGrid + 2}`,
                 height: `${columnWidth}px`,
             }"
+            :class="{ 'cursor-pointer': !disableHover }"
+            @click="
+                !disableHover
+                    ? router.push({
+                          name: 'Home',
+                          query: { artworkId: imageIndex },
+                      })
+                    : undefined;
+                addBodyNoScrollClass();
+            "
         >
             <div
-                class="bg-contain bg-no-repeat rounded-lg h-full w-full hover"
+                class="bg-contain bg-no-repeat rounded-lg h-full w-full"
+                :class="{ hover: !disableHover }"
                 :style="{
                     backgroundImage: `url(${imageSource})`,
                 }"
@@ -46,19 +65,32 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-const props = defineProps<{
-    imageSource: string;
-    imageHeight: number;
-    imageIndex: number;
-    imageWidth: number;
-    ratio: "square" | "portrait" | "blank";
-    columnWidth: number;
-}>();
+const props = withDefaults(
+    defineProps<{
+        imageSource: string;
+        imageHeight: number;
+        imageIndex: number;
+        imageWidth: number;
+        ratio?: "square" | "portrait" | "blank";
+        columnWidth: number;
+        disableHover?: boolean;
+        isMobile: boolean;
+    }>(),
+    {
+        ratio: "portrait",
+        disableHover: false,
+    }
+);
 
 const router = useRouter();
 
-const realImageHeight = ref<Number>();
+const realImageHeight = ref<number>();
 const ratioGrid = ref<number>();
+
+function addBodyNoScrollClass() {
+    if (props.isMobile) return;
+    document.body.classList.add("no-scroll");
+}
 
 onMounted(() => {
     realImageHeight.value =

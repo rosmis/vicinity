@@ -105,9 +105,10 @@
 <script lang="ts" setup>
 import { ArrowBack, ArrowForward } from "@vicons/ionicons5";
 import { NCarousel } from "naive-ui";
+import { ArtworkConfig } from "../../types/artworks";
 
 defineProps<{
-    artworks: any;
+    artworks: ArtworkConfig[];
     isMobile: boolean;
 }>();
 </script>

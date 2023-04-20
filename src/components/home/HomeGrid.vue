@@ -42,6 +42,7 @@
                     :column-width="isMobile ? 130 : 200"
                     :image-index="item.id"
                     :ratio="item.attributes.format"
+                    :is-mobile="isMobile"
                 />
             </template>
         </div>
@@ -50,9 +51,10 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
+import { ArtworkConfig } from "../../types/artworks";
 
 defineProps<{
-    gridArray: any;
+    gridArray: ArtworkConfig[];
     isMobile: boolean;
 }>();
 
