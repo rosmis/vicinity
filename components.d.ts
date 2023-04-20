@@ -13,6 +13,7 @@ declare module '@vue/runtime-core' {
     HomeFooter: typeof import('./src/components/home/HomeFooter.vue')['default']
     HomeGrid: typeof import('./src/components/home/HomeGrid.vue')['default']
     HomeHeader: typeof import('./src/components/home/HomeHeader.vue')['default']
+    HomeTopBar: typeof import('./src/components/home/HomeTopBar.vue')['default']
     Navbar: typeof import('./src/components/navbar/Navbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
