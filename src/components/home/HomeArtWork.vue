@@ -21,7 +21,7 @@
                 <ui-level class="h-full" space="lg" vertical-align="top">
                     <ui-level
                         v-if="artwork"
-                        class="flex-col bg-green-400 w-2/5"
+                        class="flex-col w-2/5"
                         :style="{
                             height: `${totalLeftColumnHeight}px`,
                         }"
@@ -47,9 +47,6 @@
                                                 : `Untitled ${artwork.data.data.id}`
                                         }}"
                                     </h1>
-                                    <pre>
-                                        {{ totalLeftColumnHeight }}
-                                    </pre>
                                     <h1 class="text-right w-full text-2xl">
                                         By
                                         {{
@@ -222,26 +219,30 @@ const imageColumnWidth = ref<number>();
 const isImageHovered = ref(false);
 const selectedArtworkId = ref<number>(props.selectedArtworkId);
 
+const aditionnalImageColumnHeight = ref(0);
+const moreImageColumnHeight = ref(0);
+
 const totalLeftColumnHeight = computed(() => {
-    const aditionnalImageColumnHeight = ref(0);
-    const moreImageColumnHeight = ref(0);
+    if (artwork.value?.data.data.attributes.aditionnalImages.data)
+        // nextTick is to assure the component's ref is correctly mounted
+        nextTick(() => {
+            aditionnalImageColumnHeight.value =
+                gridContainerAditionnal.value?.offsetHeight!;
+        });
 
-    if (artwork.value?.data.data.attributes.aditionnalImages.data) {
-        aditionnalImageColumnHeight.value =
-            gridContainerAditionnal.value?.offsetHeight!;
-        console.log("aditionnal", aditionnalImageColumnHeight.value);
-    }
-
-    if (artworksByArtist.value && artworksByArtist.value?.data.data) {
-        moreImageColumnHeight.value = gridContainerMore.value?.offsetHeight!;
-        console.log("more", moreImageColumnHeight.value);
-    }
-
-    console.log("formattedImageHeight", formattedImageHeight.value + 2 * 24);
+    if (artworksByArtist.value && artworksByArtist.value?.data.data)
+        nextTick(() => {
+            moreImageColumnHeight.value =
+                gridContainerMore.value?.offsetHeight!;
+        });
 
     return (
-        formattedImageHeight.value + 2 * 24 + 48 + moreImageColumnHeight.value
-        // aditionnalImageColumnHeight.value
+        // 2*24 and 48 for the aditionnal padding of component not taken into account with offsetHeight
+        formattedImageHeight.value +
+        2 * 24 +
+        48 +
+        moreImageColumnHeight.value +
+        aditionnalImageColumnHeight.value
     );
 });
 
