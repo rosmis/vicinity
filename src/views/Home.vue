@@ -16,7 +16,7 @@
                 <template #trigger>
                     <div
                         ref="container"
-                        class="bg-white rounded-full cursor-pointer h-20 shadow-xl p-2 bottom-4 left-[90%] w-20 z-30 sticky"
+                        class="bg-white rounded-full cursor-pointer h-20 shadow-xl p-2 bottom-4 left-[93%] w-20 z-30 sticky"
                     ></div>
                 </template>
                 Coming soon...
