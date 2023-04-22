@@ -3,7 +3,13 @@
         <div class="w-full relative">
             <HomeHeader
                 v-if="initialArtworks"
-                :artworks="initialArtworks.slice(0, 3)"
+                :artworks="
+                    initialArtworks
+                        .filter(
+                            (artwork) => artwork.attributes.format === 'square'
+                        )
+                        .slice(0, 3)
+                "
                 :is-mobile="isMobile"
             />
             <HomeGrid
