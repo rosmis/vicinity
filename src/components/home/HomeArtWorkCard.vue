@@ -1,8 +1,8 @@
 <template>
-    <template v-if="imageSource && ratioGrid">
+    <template v-if="ratioGrid">
         <div
             v-if="ratio === 'portrait'"
-            class="w-full wrapper portrait overflow-hidden"
+            class="w-full wrapper portrait overflow-hidden gs_reveal"
             :class="{ 'cursor-pointer': !disableHover }"
             :style="{
                 height: `${realImageHeight}px`,
@@ -29,7 +29,7 @@
 
         <div
             v-if="ratio === 'square'"
-            class="w-full wrapper overflow-hidden"
+            class="w-full wrapper overflow-hidden gs_reveal"
             :style="{
                 gridRowEnd: `span ${ratioGrid + 2}`,
                 height: `${columnWidth}px`,

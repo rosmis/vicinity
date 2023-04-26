@@ -4,7 +4,7 @@
     >
         <div
             screen="art"
-            class="bg-white rounded-t-2xl w-full top-8 right-0 bottom-0 left-0 absolute overflow-y-auto"
+            class="bg-white rounded-t-2xl w-full top-8 right-0 bottom-0 left-0 absolute overflow-y-auto gs_to_top artworkTransform"
             ref="outsideWrapper"
             id="mainContainer"
         >
@@ -199,6 +199,7 @@ import axios from "axios";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
+import { useOpenArtworkAnimation } from "../../composables/gsap/useOpenArtworkAnimation";
 import { downloadFromUrl } from "../../composables/useDownloadFromUrl";
 import { headerOptions } from "../../composables/useHeadersToken";
 import { Artwork, Artworks } from "../../types/artworks";
@@ -216,6 +217,7 @@ const route = useRoute();
 
 onMounted(() => {
     imageColumnWidth.value = imageColumn.value!.clientWidth * 0.6;
+    useOpenArtworkAnimation().play().timeScale(2);
 });
 
 const imageColumn = ref<HTMLDivElement>();
@@ -367,6 +369,10 @@ interface ArtworkImageFormat {
     grid-template-columns: repeat(auto-fill, 200px);
     grid-auto-rows: minmax(16px, auto);
     grid-gap: 16px;
+}
+
+.artworkTransform {
+    transform: translate(0, 100%);
 }
 
 /* TODO fix the transition ppty so it fades in and out for the backdrop-filter ppty */

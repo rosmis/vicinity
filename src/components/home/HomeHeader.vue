@@ -18,16 +18,20 @@
                         }"
                     >
                         <h1
-                            class="font-semibold text-5xl"
+                            class="font-semibold text-5xl overflow-hidden"
                             :class="{
                                 'mb-4': !isMobile,
                             }"
                         >
-                            We bring artists to light
+                            <span class="titleTransform gs_blinds">
+                                We bring artists to light
+                            </span>
                         </h1>
-                        <p class="text-xl mb-2">
-                            Discover the future of creativity and be at the art
-                            forefront
+                        <p class="text-xl mb-2 overflow-hidden">
+                            <span class="titleTransform gs_blinds">
+                                Discover the future of creativity and be at the
+                                art forefront
+                            </span>
                         </p>
                         <a href="#artgrid">Discover more</a>
                     </ui-level>
@@ -105,15 +109,23 @@
 <script lang="ts" setup>
 import { ArrowBack, ArrowForward } from "@vicons/ionicons5";
 import { NCarousel } from "naive-ui";
+import { onMounted } from "vue";
+import { useBlindRevealAnimation } from "../../composables/gsap/useBlindRevealAnimation";
 import { ArtworkConfig } from "../../types/artworks";
 
 defineProps<{
     artworks: ArtworkConfig[];
     isMobile: boolean;
 }>();
+
+onMounted(() => useBlindRevealAnimation());
 </script>
 
 <style scoped>
+.titleTransform {
+    display: block;
+    transform: translate(0, 100%);
+}
 .custom-arrow {
     display: flex;
     position: absolute;
