@@ -181,6 +181,7 @@
                                     "
                                     :column-width="200"
                                     :image-index="item.id"
+                                    :is-mobile="isMobile"
                                 />
                             </div>
                         </div>
@@ -204,6 +205,7 @@ import { Artwork, Artworks } from "../../types/artworks";
 
 const props = defineProps<{
     selectedArtworkId: number;
+    isMobile: boolean;
 }>();
 
 const emit = defineEmits<{

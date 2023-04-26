@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     UiInput: typeof import('./src/components/ui/UiInput.vue')['default']
     UiLevel: typeof import('./src/components/ui/UiLevel.vue')['default']
+    UiLoader: typeof import('./src/components/ui/UiLoader.vue')['default']
     UiPage: typeof import('./src/components/ui/UiPage.vue')['default']
     UiProfilePicture: typeof import('./src/components/ui/UiProfilePicture.vue')['default']
     UiTitle: typeof import('./src/components/ui/UiTitle.vue')['default']

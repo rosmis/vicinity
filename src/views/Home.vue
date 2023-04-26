@@ -34,6 +34,7 @@
         <HomeArtWork
             v-if="selectedArtworkId && !isMobile"
             :selected-artwork-id="selectedArtworkId"
+            :is-mobile="isMobile"
             @close="
                 selectedArtworkId = undefined;
                 removeBodyNoScrollClass();
