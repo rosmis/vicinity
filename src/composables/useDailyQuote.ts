@@ -52,5 +52,7 @@ export function useDailyQuote(): Quote {
         }
     );
 
+    console.log(quoteStorage.value);
+
     return quoteStorage.value!;
 }
