@@ -88,7 +88,7 @@
                                             : 'center center'
                                     }`,
                                 }"
-                                class="bg-cover bg-no-repeat cursor-pointer w-full z-10 hoverEffect relative"
+                                class="bg-cover bg-no-repeat cursor-pointer w-full w-[90%] z-10 relative"
                             ></div>
                         </ui-level>
 
@@ -327,13 +327,6 @@ interface ArtworkImageFormat {
 .hoverEffect {
     width: 60%;
     transition: all 0.2s ease-in-out;
-}
-
-@media screen and (max-width: 769px) {
-    .hoverEffect {
-        width: 90%;
-        transition: all 0.2s ease-in-out;
-    }
 }
 
 .hoverEffect:hover {
