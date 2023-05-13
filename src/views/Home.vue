@@ -32,7 +32,7 @@
         <HomeFooter />
 
         <HomeArtWork
-            v-if="selectedArtworkId && !isMobile"
+            v-if="selectedArtworkId"
             :selected-artwork-id="selectedArtworkId"
             :is-mobile="isMobile"
             @close="
@@ -114,7 +114,6 @@ const { data: _artworks } = useQuery(
             }
 
             initialArtworks.value?.push(...artworks.data.data);
-            console.log(initialArtworks.value);
         },
 
         refetchOnWindowFocus: false,

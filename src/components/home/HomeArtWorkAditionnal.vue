@@ -1,5 +1,5 @@
 <template>
-    <ui-wrapper class="mt-[8%] w-full">
+    <ui-wrapper class="mt-[8%] w-full" :class="{ '!px-0': isMobile }">
         <ui-level class="flex-col" vertical-align="top">
             <h1 v-if="type === 'aditionnal'" class="mb-4 text-2xl">
                 Aditionnal images
@@ -8,7 +8,13 @@
                 Discover more about this artist...
             </h1>
 
-            <div class="w-full grid-container justify-start">
+            <div
+                class="w-full grid-container"
+                :class="{
+                    'justify-start': !isMobile,
+                    'justify-center': isMobile,
+                }"
+            >
                 <HomeArtWorkCard
                     v-for="(item, index) in aditionnalImages"
                     :key="index"
@@ -30,7 +36,7 @@
                             : item.attributes.mainImage.data.attributes.formats
                                   .small.height
                     "
-                    :column-width="180"
+                    :column-width="isMobile ? 130 : 180"
                     :image-index="item.id"
                     :is-mobile="isMobile"
                     :disable-hover="type === 'aditionnal' ? true : false"
@@ -54,5 +60,11 @@ defineProps<{
     grid-template-columns: repeat(auto-fill, 180px);
     grid-auto-rows: minmax(16px, auto);
     grid-gap: 16px;
+}
+
+@media screen and (max-width: 769px) {
+    .grid-container {
+        grid-template-columns: repeat(auto-fill, 130px);
+    }
 }
 </style>

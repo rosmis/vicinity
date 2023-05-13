@@ -18,13 +18,26 @@
             </ui-level>
 
             <ui-wrapper padded class="h-full">
-                <ui-level class="h-full" space="lg" vertical-align="top">
-                    <ui-level v-if="artwork" class="flex-col w-1/2">
+                <ui-level
+                    class="h-full w-full"
+                    space="lg"
+                    vertical-align="top"
+                    :class="{ 'flex-col': isMobile }"
+                >
+                    <ui-level
+                        v-if="artwork"
+                        class="flex-col"
+                        :class="{ 'w-1/2': !isMobile, 'w-full': isMobile }"
+                    >
                         <ui-level
                             class="flex-col w-full"
-                            vertical-align="bottom"
+                            :vertical-align="isMobile ? undefined : 'bottom'"
                         >
-                            <ui-level align="right" space="xl">
+                            <ui-level
+                                :align="isMobile ? undefined : 'right'"
+                                :space="isMobile ? '' : 'xl'"
+                                class="w-full"
+                            >
                                 <ui-profile-picture
                                     :user-infos="
                                         artwork.data.data.attributes.artists
@@ -54,6 +67,31 @@
                             <p>
                                 {{ artwork.data.data.attributes.description }}
                             </p>
+
+                            <div
+                                v-if="artwork && isMobile"
+                                :style="{
+                                    backgroundImage: `url(${
+                                        mainArtworkFormat[
+                                            Object.keys(
+                                                mainArtworkFormat
+                                            ).includes('medium')
+                                                ? 'medium'
+                                                : 'small'
+                                        ].url
+                                    })`,
+                                    height: `${formattedImageHeight}px`,
+                                    transformOrigin: `${
+                                        mainImageRatio === 'landscape' ||
+                                        mainImageRatio === 'square'
+                                            ? 'right center'
+                                            : 'center center'
+                                    }`,
+                                }"
+                                class="bg-cover bg-no-repeat cursor-pointer w-full z-10 hoverEffect relative"
+                                @mouseover="isImageHovered = true"
+                                @mouseleave="isImageHovered = false"
+                            ></div>
                         </ui-level>
 
                         <HomeArtWorkAditionnal
@@ -84,7 +122,8 @@
 
                     <div
                         ref="imageColumn"
-                        class="flex flex-col h-full w-1/2 items-start justify-start"
+                        class="flex flex-col h-full items-start justify-start"
+                        :class="{ 'w-1/2': !isMobile, 'w-full': isMobile }"
                     >
                         <ui-level class="my-6 w-full" align="center">
                             <div
@@ -92,7 +131,7 @@
                                 class="inset-0 absolute filterBlur"
                             ></div>
                             <div
-                                v-if="artwork"
+                                v-if="artwork && !isMobile"
                                 :style="{
                                     backgroundImage: `url(${
                                         mainArtworkFormat[
@@ -115,7 +154,7 @@
                                 @mouseover="isImageHovered = true"
                                 @mouseleave="isImageHovered = false"
                             >
-                                <ui-level
+                                <!-- <ui-level
                                     align="center"
                                     class="rounded-md cursor-pointer p-1 bottom-4 left-4 absolute filterBlur"
                                     @click="
@@ -135,7 +174,7 @@
                                     <n-icon size="24" color="white"
                                         ><DownloadOutline
                                     /></n-icon>
-                                </ui-level>
+                                </ui-level> -->
                             </div>
                         </ui-level>
 
@@ -158,14 +197,13 @@
 </template>
 
 <script lang="ts" setup>
-import { Close, DownloadOutline } from "@vicons/ionicons5";
+import { Close } from "@vicons/ionicons5";
 import { onClickOutside } from "@vueuse/core";
 import axios from "axios";
 import { computed, onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
 import { useOpenArtworkAnimation } from "../../composables/gsap/useOpenArtworkAnimation";
-import { downloadFromUrl } from "../../composables/useDownloadFromUrl";
 import { headerOptions } from "../../composables/useHeadersToken";
 import { Artwork, Artworks } from "../../types/artworks";
 
@@ -181,7 +219,8 @@ const emit = defineEmits<{
 const route = useRoute();
 
 onMounted(() => {
-    imageColumnWidth.value = imageColumn.value!.clientWidth * 0.6;
+    imageColumnWidth.value =
+        imageColumn.value!.clientWidth * (props.isMobile ? 0.9 : 0.6);
     useOpenArtworkAnimation().play().timeScale(2);
 });
 
@@ -290,6 +329,13 @@ interface ArtworkImageFormat {
 .hoverEffect {
     width: 60%;
     transition: all 0.2s ease-in-out;
+}
+
+@media screen and (max-width: 769px) {
+    .hoverEffect {
+        width: 90%;
+        transition: all 0.2s ease-in-out;
+    }
 }
 
 .hoverEffect:hover {
