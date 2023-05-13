@@ -45,6 +45,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useScroll } from "@vueuse/core";
 import axios from "axios";
 import { shuffle } from "lodash";
 import lottie from "lottie-web";
@@ -60,6 +61,16 @@ import { ArtworkConfig, Artworks } from "../types/artworks";
 const container = ref<Element>();
 const selectedArtworkId = ref<number>();
 const initialArtworks = ref<ArtworkConfig[]>();
+const page = ref(1);
+
+const { arrivedState } = useScroll(document, { offset: { bottom: 450 } });
+
+watch(
+    () => arrivedState.bottom,
+    () => {
+        if (arrivedState.bottom) page.value++;
+    }
+);
 
 onMounted(() => {
     removeBodyNoScrollClass();
@@ -85,18 +96,27 @@ const route = useRoute();
 const isMobile = useMobileBreakpoint("md");
 
 const { data: _artworks } = useQuery(
-    ["artworks", route.query.artworkId],
+    ["artworks", [route.query.artworkId, page]],
     () =>
         axios.get<Artworks>(
             `${
                 import.meta.env.VITE_STRAPI_URL
-            }/api/artworks?populate=*&pagination[pageSize]=50`,
+            }/api/artworks?populate=*&pagination[pageSize]=50&pagination[page]=${
+                page.value
+            }`,
             headerOptions
         ),
     {
         onSuccess: (artworks) => {
-            initialArtworks.value = shuffle(artworks.data.data);
+            if (page.value === 1) {
+                initialArtworks.value = shuffle(artworks.data.data);
+                return;
+            }
+
+            initialArtworks.value?.push(...artworks.data.data);
+            console.log(initialArtworks.value);
         },
+
         refetchOnWindowFocus: false,
         keepPreviousData: true,
     }
