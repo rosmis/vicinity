@@ -87,21 +87,7 @@
                 </ui-level>
             </ui-wrapper>
 
-            <ui-level
-                class="bg-[#3A3A3A] w-full"
-                align="center"
-                :class="{ 'p-4': isMobile, 'h-20': !isMobile }"
-            >
-                <p
-                    class="text-white text-2xl"
-                    :class="{ 'text-center': isMobile }"
-                >
-                    <span class="italic"
-                        >“Art is never finished, only abandoned”</span
-                    >
-                    - Leonard de Vinci
-                </p>
-            </ui-level>
+            <HomeQuote :is-mobile="isMobile" />
         </ui-level>
     </ui-page>
 </template>

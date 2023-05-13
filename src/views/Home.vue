@@ -58,6 +58,10 @@ import { headerOptions } from "../composables/useHeadersToken";
 import { useMobileBreakpoint } from "../composables/useMobileBreakpoints";
 import { ArtworkConfig, Artworks } from "../types/artworks";
 
+const router = useRouter();
+const route = useRoute();
+const isMobile = useMobileBreakpoint("md");
+
 const container = ref<Element>();
 const selectedArtworkId = ref<number>();
 const initialArtworks = ref<ArtworkConfig[]>();
@@ -90,10 +94,6 @@ onMounted(() => {
     };
     lottie.loadAnimation(params);
 });
-
-const router = useRouter();
-const route = useRoute();
-const isMobile = useMobileBreakpoint("md");
 
 const { data: _artworks } = useQuery(
     ["artworks", [route.query.artworkId, page]],
