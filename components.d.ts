@@ -7,9 +7,12 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    copy: typeof import('./src/components/home/HomeArtWorkAditionnal copy.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     HomeArtWork: typeof import('./src/components/home/HomeArtWork.vue')['default']
+    HomeArtWorkAditionnal: typeof import('./src/components/home/HomeArtWorkAditionnal.vue')['default']
     HomeArtWorkCard: typeof import('./src/components/home/HomeArtWorkCard.vue')['default']
+    HomeArtWorkMore: typeof import('./src/components/home/HomeArtWorkMore.vue')['default']
     HomeFooter: typeof import('./src/components/home/HomeFooter.vue')['default']
     HomeGrid: typeof import('./src/components/home/HomeGrid.vue')['default']
     HomeHeader: typeof import('./src/components/home/HomeHeader.vue')['default']

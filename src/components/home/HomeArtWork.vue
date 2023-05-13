@@ -19,15 +19,9 @@
 
             <ui-wrapper padded class="h-full">
                 <ui-level class="h-full" space="lg" vertical-align="top">
-                    <ui-level
-                        v-if="artwork"
-                        class="flex-col w-2/5"
-                        :style="{
-                            height: `${totalLeftColumnHeight}px`,
-                        }"
-                    >
+                    <ui-level v-if="artwork" class="flex-col w-1/2">
                         <ui-level
-                            class="flex-col w-full top-24 right-0 left-0 sticky"
+                            class="flex-col w-full"
                             vertical-align="bottom"
                         >
                             <ui-level align="right" space="xl">
@@ -61,11 +55,36 @@
                                 {{ artwork.data.data.attributes.description }}
                             </p>
                         </ui-level>
+
+                        <HomeArtWorkAditionnal
+                            v-if="
+                                artwork?.data.data.attributes.aditionnalImages
+                                    .data
+                            "
+                            :aditionnal-images="
+                                artwork.data.data.attributes.aditionnalImages
+                                    .data
+                            "
+                            type="aditionnal"
+                            :is-mobile="isMobile"
+                        />
+
+                        <HomeArtWorkAditionnal
+                            v-else-if="
+                                artworksByArtist &&
+                                artworksByArtist?.data.data &&
+                                !artwork?.data.data.attributes.aditionnalImages
+                                    .data
+                            "
+                            :aditionnal-images="artworksByArtist?.data.data"
+                            :is-mobile="isMobile"
+                            type="more"
+                        />
                     </ui-level>
 
                     <div
                         ref="imageColumn"
-                        class="flex flex-col h-full w-3/5 items-start justify-start"
+                        class="flex flex-col h-full w-1/2 items-start justify-start"
                     >
                         <ui-level class="my-6 w-full" align="center">
                             <div
@@ -120,71 +139,17 @@
                             </div>
                         </ui-level>
 
-                        <div
+                        <HomeArtWorkAditionnal
                             v-if="
+                                artworksByArtist &&
+                                artworksByArtist?.data.data &&
                                 artwork?.data.data.attributes.aditionnalImages
                                     .data
                             "
-                            class="mt-[8%] w-full"
-                            ref="gridContainerAditionnal"
-                        >
-                            <h1 class="mb-4 text-2xl">Aditionnal images</h1>
-
-                            <div class="w-full grid-container justify-center">
-                                <HomeArtWorkCard
-                                    v-for="(item, index) in artwork.data.data
-                                        .attributes.aditionnalImages.data"
-                                    :key="index"
-                                    :image-source="
-                                        item.attributes.formats.small.url
-                                    "
-                                    :image-width="
-                                        item.attributes.formats.small.width
-                                    "
-                                    :image-height="
-                                        item.attributes.formats.small.height
-                                    "
-                                    :column-width="200"
-                                    :image-index="item.id"
-                                    disable-hover
-                                />
-                            </div>
-                        </div>
-
-                        <div
-                            v-if="
-                                artworksByArtist && artworksByArtist?.data.data
-                            "
-                            class="mt-[8%] w-full pb-12"
-                            ref="gridContainerMore"
-                        >
-                            <h1 class="mb-4 text-2xl">
-                                Discover more about this artist...
-                            </h1>
-
-                            <div class="w-full grid-container justify-center">
-                                <HomeArtWorkCard
-                                    v-for="(item, index) in artworksByArtist
-                                        .data.data"
-                                    :key="index"
-                                    :image-source="
-                                        item.attributes.mainImage.data
-                                            .attributes.formats.small.url
-                                    "
-                                    :image-width="
-                                        item.attributes.mainImage.data
-                                            .attributes.formats.small.width
-                                    "
-                                    :image-height="
-                                        item.attributes.mainImage.data
-                                            .attributes.formats.small.height
-                                    "
-                                    :column-width="200"
-                                    :image-index="item.id"
-                                    :is-mobile="isMobile"
-                                />
-                            </div>
-                        </div>
+                            :aditionnal-images="artworksByArtist?.data.data"
+                            :is-mobile="isMobile"
+                            type="more"
+                        />
                     </div>
                 </ui-level>
             </ui-wrapper>
@@ -196,7 +161,7 @@
 import { Close, DownloadOutline } from "@vicons/ionicons5";
 import { onClickOutside } from "@vueuse/core";
 import axios from "axios";
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
 import { useOpenArtworkAnimation } from "../../composables/gsap/useOpenArtworkAnimation";
@@ -222,39 +187,10 @@ onMounted(() => {
 
 const imageColumn = ref<HTMLDivElement>();
 const outsideWrapper = ref<HTMLDivElement>();
-const gridContainerAditionnal = ref<HTMLDivElement>();
-const gridContainerMore = ref<HTMLDivElement>();
 
 const imageColumnWidth = ref<number>();
 const isImageHovered = ref(false);
 const selectedArtworkId = ref<number>(props.selectedArtworkId);
-
-const aditionnalImageColumnHeight = ref(0);
-const moreImageColumnHeight = ref(0);
-
-const totalLeftColumnHeight = computed(() => {
-    if (artwork.value?.data.data.attributes.aditionnalImages.data)
-        // nextTick is to assure the component's ref is correctly mounted
-        nextTick(() => {
-            aditionnalImageColumnHeight.value =
-                gridContainerAditionnal.value?.offsetHeight!;
-        });
-
-    if (artworksByArtist.value && artworksByArtist.value?.data.data)
-        nextTick(() => {
-            moreImageColumnHeight.value =
-                gridContainerMore.value?.offsetHeight!;
-        });
-
-    return (
-        // 2*24 and 48 for the aditionnal padding of component not taken into account with offsetHeight
-        formattedImageHeight.value +
-        2 * 24 +
-        48 +
-        moreImageColumnHeight.value +
-        aditionnalImageColumnHeight.value
-    );
-});
 
 const { data: artwork } = useQuery(
     ["artwork", selectedArtworkId],

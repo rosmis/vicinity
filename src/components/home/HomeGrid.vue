@@ -1,5 +1,5 @@
 <template>
-    <ui-wrapper id="artgrid" padded class="w-full">
+    <ui-wrapper id="artgrid" ref="artgridScroll" padded class="w-full">
         <p
             v-if="isMobile"
             class="font-semibold mt-12 text-xl mb-4 leading-relaxed"
@@ -9,7 +9,7 @@
             share, contact... Let yourself be carried away by the universes and
             styles gathered by our team at Vicinity.
         </p>
-        <div class="grid-container justify-center" ref="gridRef">
+        <div class="grid-container justify-center">
             <p
                 v-if="!isMobile"
                 class="font-semibold leading-relaxed text-4xl col-span-3"
