@@ -53,7 +53,7 @@ import { NTooltip } from "naive-ui";
 import { onMounted, ref, watch } from "vue";
 import { useQuery } from "vue-query";
 import { useRoute, useRouter } from "vue-router";
-import animationData from "../assets/bouton randomize lottie.json";
+import animationData from "../assets/Calque 1_randomize sprml.json";
 import { headerOptions } from "../composables/useHeadersToken";
 import { useMobileBreakpoint } from "../composables/useMobileBreakpoints";
 import { ArtworkConfig, Artworks } from "../types/artworks";

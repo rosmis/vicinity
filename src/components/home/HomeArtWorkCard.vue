@@ -2,7 +2,7 @@
     <template v-if="ratioGrid">
         <div
             v-if="ratio === 'portrait'"
-            class="w-full wrapper portrait overflow-hidden gs_reveal"
+            class="w-full wrapper portrait overflow-hidden"
             :class="{ 'cursor-pointer': !disableHover }"
             :style="{
                 height: `${realImageHeight}px`,
@@ -29,7 +29,7 @@
 
         <div
             v-if="ratio === 'square'"
-            class="w-full wrapper overflow-hidden gs_reveal"
+            class="w-full wrapper overflow-hidden"
             :style="{
                 gridRowEnd: `span ${ratioGrid + 2}`,
                 height: `${columnWidth}px`,
@@ -53,11 +53,6 @@
                 }"
             ></div>
         </div>
-
-        <div
-            v-if="ratio === 'blank'"
-            class="bg-white rounded-lg w-full square"
-        ></div>
     </template>
 </template>
 
@@ -71,7 +66,7 @@ const props = withDefaults(
         imageHeight: number;
         imageIndex: number;
         imageWidth: number;
-        ratio?: "square" | "portrait" | "blank";
+        ratio?: "square" | "portrait";
         columnWidth: number;
         disableHover?: boolean;
         isMobile: boolean;

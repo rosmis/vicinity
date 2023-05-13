@@ -4,7 +4,8 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 export function useRandomFadeArtworkAnimation() {
     gsap.registerPlugin(ScrollTrigger);
 
-    const artworks = document.querySelector(".gs_reveal");
+    const artworks = gsap.utils.toArray(".artworkCard");
+
     console.log(artworks);
 
     // artworks.forEach((elem) => {
