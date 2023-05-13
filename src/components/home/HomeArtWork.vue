@@ -89,8 +89,6 @@
                                     }`,
                                 }"
                                 class="bg-cover bg-no-repeat cursor-pointer w-full z-10 hoverEffect relative"
-                                @mouseover="isImageHovered = true"
-                                @mouseleave="isImageHovered = false"
                             ></div>
                         </ui-level>
 
