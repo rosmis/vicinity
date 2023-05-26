@@ -103,7 +103,7 @@ const { data: _artworks } = useQuery(
                 import.meta.env.VITE_STRAPI_URL
             }/api/artworks?populate=*&pagination[pageSize]=50&pagination[page]=${
                 page.value
-            }&random=true`,
+            }`,
             headerOptions
         ),
     {
